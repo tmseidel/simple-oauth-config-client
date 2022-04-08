@@ -76,4 +76,7 @@ public class LoginService {
         }
     }
 
+    public void logout() {
+        session.logout();
+    }
 }

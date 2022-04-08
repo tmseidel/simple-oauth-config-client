@@ -8,6 +8,7 @@ import org.remus.simpleoauthconfigclient.service.ShellHelper;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.shell.standard.ShellMethodAvailability;
 
 @ShellComponent
 public class SystemComponent {
@@ -40,8 +41,6 @@ public class SystemComponent {
         return session.isLoggedIn() ? Availability.available() : Availability.unavailable("No open session available");
     }
 
-
-
     @ShellMethod("Open connection to a simple-oauth-server")
     public void login(String endpoint, String clientId, String clientSecret) {
         LoginResponse login = loginService.login(endpoint, clientId, clientSecret);
@@ -49,5 +48,11 @@ public class SystemComponent {
         shellHelper.print(" - Access token is ");
         shellHelper.printInfo(login.getAccessToken());
         shellHelper.print("\n");
+    }
+    @ShellMethod("Closes the current connection")
+    @ShellMethodAvailability("downloadPubKeyAvailability")
+    public void logout() {
+        loginService.logout();
+        shellHelper.printSuccess("SUCCESS\n");
     }
 }
