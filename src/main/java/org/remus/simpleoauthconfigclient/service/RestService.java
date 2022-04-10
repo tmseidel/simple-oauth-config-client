@@ -17,7 +17,9 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -45,18 +47,35 @@ public class RestService {
 
         return restTemplate.exchange(session.getEndpoint() + url, method, request, result).getBody();
     }
-
-
     public <T> T halListing(String url, String jsonPath, TypeReference target) {
+        return halListing(url,jsonPath,"self",target, null);
+    }
+    public <T> T halListing(String url, String jsonPath, String follow, Class target) {
+        return halListing(url,jsonPath,follow,null, target);
+    }
+    public <T> T halListing(String url, String jsonPath, String follow,TypeReference target) {
+        return halListing(url,jsonPath,follow,target, null);
+    }
+
+    private <T> T halListing(String url, String jsonPath, String follow, TypeReference typeReference, Class target) {
         HttpHeaders headers = createHttpHeaders();
         Traverson traverson = new Traverson(URI.create(session.getEndpoint() + url), MediaTypes.HAL_JSON);
-        JSONArray returnValue = traverson
-                .follow("self").withHeaders(headers)
+        Object returnValue = traverson
+                .follow(follow).withHeaders(headers)
                 .toObject(jsonPath);
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            return (T) objectMapper.readValue(returnValue.toJSONString(), target);
+            String jsonString = null;
+            if (returnValue instanceof JSONArray) {
+                jsonString = ((JSONArray) returnValue).toJSONString();
+            } else {
+                jsonString = objectMapper.writeValueAsString(returnValue);
+            }
+            if (typeReference != null) {
+                return (T) objectMapper.readValue(jsonString, typeReference);
+            }
+            return (T) objectMapper.readValue(jsonString, target);
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Reading the response was not successful",e);
         }
