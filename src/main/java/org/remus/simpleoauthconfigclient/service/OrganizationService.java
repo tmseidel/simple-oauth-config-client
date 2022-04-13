@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class OrganizationService {
 
-    private static final String REST_URL = "/auth/admin/data/organizations";
+    public static final String REST_URL = "/auth/admin/data/organizations";
 
     private RestService restTemplate;
 
@@ -42,8 +42,12 @@ public class OrganizationService {
         return restTemplate.exchange(REST_URL + "/" + id, Organization.class, HttpMethod.PATCH, Optional.of(organization));
     }
 
+
     public void delete(int id) {
         restTemplate.exchange(REST_URL + "/" + id, Void.class, HttpMethod.DELETE, Optional.empty());
     }
 
+    public void checkId(int organizationId) {
+        Organization exchange = restTemplate.exchange(REST_URL + "/" + organizationId, Organization.class, HttpMethod.GET, Optional.empty());
+    }
 }

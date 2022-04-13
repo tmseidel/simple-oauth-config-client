@@ -1,22 +1,49 @@
 package org.remus.simpleoauthconfigclient.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
+    public static class UserHalContainer {
+        @JsonProperty("_embedded")
+        private UserHalResource resource;
+
+        public UserHalResource getResource() {
+            return resource;
+        }
+
+        public void setResource(UserHalResource resource) {
+            this.resource = resource;
+        }
+    }
+
+    public static class UserHalResource {
+        private List<User> users;
+
+        public List<User> getUsers() {
+            return users;
+        }
+
+        public void setUsers(List<User> users) {
+            this.users = users;
+        }
+    }
+
     private int id;
 
     private String name;
 
-    private Set<String> scopes;
+    private Set<Scope> scopeList;
 
     private List<String> applications;
 
-    private String organization;
+    private Organization organization;
 
     private boolean activated;
 
@@ -24,7 +51,7 @@ public class User {
 
     private Date lastLogin;
 
-    private  String email;
+    private String email;
 
     public int getId() {
         return id;
@@ -42,12 +69,12 @@ public class User {
         this.name = name;
     }
 
-    public Set<String> getScopes() {
-        return scopes;
+    public Set<Scope> getScopeList() {
+        return scopeList;
     }
 
-    public void setScopes(Set<String> scopes) {
-        this.scopes = scopes;
+    public void setScopeList(Set<Scope> scopeList) {
+        this.scopeList = scopeList;
     }
 
     public List<String> getApplications() {
@@ -58,11 +85,11 @@ public class User {
         this.applications = applications;
     }
 
-    public String getOrganization() {
+    public Organization getOrganization() {
         return organization;
     }
 
-    public void setOrganization(String organization) {
+    public void setOrganization(Organization organization) {
         this.organization = organization;
     }
 
@@ -96,5 +123,19 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getOrganizationString() {
+        if (this.organization != null) {
+            return this.organization.getName() + "(id:" + this.organization.getId()+")";
+        }
+        return null;
+    }
+
+    public String getScopeListString() {
+        if (scopeList != null) {
+            return scopeList.stream().map(e -> e.getName() + "(id:" + e.getId()+")").collect(Collectors.joining(",","[","]"));
+        }
+        return null;
     }
 }

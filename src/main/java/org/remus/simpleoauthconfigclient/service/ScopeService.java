@@ -12,7 +12,7 @@ import java.util.Optional;
 @Service
 public class ScopeService {
 
-    private static final String REST_URL = "/auth/admin/data/scopes";
+    public static final String REST_URL = "/auth/admin/data/scopes";
 
     private RestService restTemplate;
 
@@ -44,5 +44,11 @@ public class ScopeService {
 
     public void delete(int id) {
         restTemplate.exchange(REST_URL + "/" + id, Void.class, HttpMethod.DELETE, Optional.empty());
+    }
+
+    public void checkIds(Integer[] scopeId) {
+        for (int i : scopeId) {
+            restTemplate.exchange(REST_URL + "/" + i, Scope.class, HttpMethod.GET, Optional.empty());
+        }
     }
 }

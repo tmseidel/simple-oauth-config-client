@@ -36,9 +36,19 @@ public class RestService {
 
     public <T> T exchange(String url, Class<T> result, HttpMethod method, Optional<T> requestObject) {
         HttpHeaders headers = createHttpHeaders();
+        if (requestObject.map(String.class::isInstance).orElse(false)) {
+            headers.set("Content-Type","text/uri-list");
+        } else {
+            headers.setContentType(MediaType.APPLICATION_JSON);
+        }
         HttpEntity request = requestObject.map(e -> {
             try {
-                String valueAsString = new ObjectMapper().writeValueAsString(e);
+                String valueAsString;
+                if (e instanceof String) {
+                    valueAsString = (String) e;
+                } else {
+                    valueAsString = new ObjectMapper().writeValueAsString(e);
+                }
                 return new HttpEntity( valueAsString,headers);
             } catch (JsonProcessingException ex) {
                 throw new IllegalArgumentException("Error sending request " + url, ex);
@@ -84,7 +94,6 @@ public class RestService {
 
     private HttpHeaders createHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAcceptCharset(Collections.singletonList(StandardCharsets.UTF_8));
         headers.set("Authorization", "Bearer " + session.getAccessToken());
         return headers;
