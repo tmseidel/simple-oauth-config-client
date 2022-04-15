@@ -37,7 +37,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Simple-Oauth-Config-Client ${{ github.ref }}
-          body_path: CHANGELOG.md
+          body_path: CHANGELOG.MD
           draft: false
           prerelease: false
       - name: upload release artifact
