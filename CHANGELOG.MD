@@ -1,11 +1,8 @@
-# Changelog
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-## [Unreleased]
-### Added
-* Handling for Users (CRUD)
-* Handling Scopes (CRUD)
-* Handling Applications (CRUD)
-* Handling Organizations (CRUD)
+# Release Notes v0.1
+## Added
+* CRUD handling of Users
+* CRUD handling of Applications
+* CRUD handling of Scopes
+* CRUD handling of Organization
+* Initialization of an OAuth-System
+* Download of the Public Keys

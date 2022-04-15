@@ -11,6 +11,7 @@ import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
+import org.springframework.shell.standard.ShellOption;
 import org.springframework.shell.table.BeanListTableModel;
 import org.springframework.shell.table.BorderStyle;
 import org.springframework.shell.table.TableBuilder;
@@ -81,7 +82,7 @@ public class UserComponent {
     }
 
     @ShellMethod(value = "Edits an existing user", key = "edit-user")
-    public String edit(@NotBlank() int id, @NotBlank() String email, @NotBlank() String name, @NotBlank() String password, boolean activated) {
+    public String edit(@NotBlank() int id, @ShellOption(defaultValue = "") String email,  @ShellOption(defaultValue = "") String name,  @ShellOption(defaultValue = "") String password, boolean activated) {
         User user = userService.edit(id, email, name, password,activated);
         return render(Collections.singletonList(user));
     }
