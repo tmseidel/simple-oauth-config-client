@@ -10,6 +10,7 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 11
@@ -39,7 +40,7 @@ jobs:
           body_path: CHANGELOG.md
           draft: false
           prerelease: false
-      -name: upload release artifact
+      - name: upload release artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
