@@ -1,6 +1,7 @@
 package org.remus.simpleoauthconfigclient.commands;
 
 import org.remus.simpleoauthconfigclient.request.User;
+import org.remus.simpleoauthconfigclient.service.ApplicationService;
 import org.remus.simpleoauthconfigclient.service.OrganizationService;
 import org.remus.simpleoauthconfigclient.service.ScopeService;
 import org.remus.simpleoauthconfigclient.service.Session;
@@ -29,15 +30,18 @@ public class UserComponent {
 
     private UserService userService;
 
+    private ApplicationService applicationService;
+
     private OrganizationService organizationService;
 
     private ScopeService scopeService;
 
     private ShellHelper shellHelper;
 
-    public UserComponent(Session session, UserService userService, OrganizationService organizationService, ScopeService scopeService, ShellHelper shellHelper) {
+    public UserComponent(Session session, UserService userService, ApplicationService applicationService, OrganizationService organizationService, ScopeService scopeService, ShellHelper shellHelper) {
         this.session = session;
         this.userService = userService;
+        this.applicationService = applicationService;
         this.organizationService = organizationService;
         this.scopeService = scopeService;
         this.shellHelper = shellHelper;
@@ -60,7 +64,7 @@ public class UserComponent {
         headers.put("name", "Name");
         headers.put("email", "Email");
         headers.put("scopeListString", "Scopes");
-        headers.put("applications", "Applications");
+        headers.put("applicationsString", "Applications");
         headers.put("organizationString", "Organization");
         TableModel model = new BeanListTableModel<>(allUsers, headers);
 
@@ -96,10 +100,18 @@ public class UserComponent {
     }
 
     @ShellMethod(value = "Assigns multiple scopes to a user", key = "assign-scopes-to-user")
-    public void assignOrganizationToUser(String scopeId, @Min(1) int userId) {
-        Integer[] integers = Arrays.stream(scopeId.split(",")).map(e -> Integer.parseInt(e.trim())).toArray(Integer[]::new);
+    public void assignSopesToUser(String scopeIds, @Min(1) int userId) {
+        Integer[] integers = Arrays.stream(scopeIds.split(",")).map(e -> Integer.parseInt(e.trim())).toArray(Integer[]::new);
         scopeService.checkIds(integers);
         userService.assignScopesToUser(integers,userId);
+        shellHelper.printSuccess("SUCCESS\n");
+    }
+
+    @ShellMethod(value = "Assigns multiple applications to a user", key = "assign-applications-to-user")
+    public void assignApplicationsToUser(String applicationIds, @Min(1) int userId) {
+        Integer[] integers = Arrays.stream(applicationIds.split(",")).map(e -> Integer.parseInt(e.trim())).toArray(Integer[]::new);
+        applicationService.checkIds(integers);
+        userService.assignApplicationsToUser(integers,userId);
         shellHelper.printSuccess("SUCCESS\n");
     }
 

@@ -41,7 +41,7 @@ public class User {
 
     private Set<Scope> scopeList;
 
-    private List<String> applications;
+    private List<Application> applications;
 
     private Organization organization;
 
@@ -77,11 +77,11 @@ public class User {
         this.scopeList = scopeList;
     }
 
-    public List<String> getApplications() {
+    public List<Application> getApplications() {
         return applications;
     }
 
-    public void setApplications(List<String> applications) {
+    public void setApplications(List<Application> applications) {
         this.applications = applications;
     }
 
@@ -132,9 +132,16 @@ public class User {
         return null;
     }
 
+    public String getApplicationsString() {
+        if (this.applications != null) {
+            return applications.stream().map(e -> e.getName() + "(id:" + e.getId()+")").collect(Collectors.joining(",\n","[","]"));
+        }
+        return null;
+    }
+
     public String getScopeListString() {
         if (scopeList != null) {
-            return scopeList.stream().map(e -> e.getName() + "(id:" + e.getId()+")").collect(Collectors.joining(",","[","]"));
+            return scopeList.stream().map(e -> e.getName() + "(id:" + e.getId()+")").collect(Collectors.joining(",\n","[","]"));
         }
         return null;
     }

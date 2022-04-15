@@ -69,7 +69,7 @@ public class ScopeComponent {
         shellHelper.printSuccess("SUCCESS\n");
     }
 
-    @ShellMethod(value = "Creates a new scope", key = "edit-scope")
+    @ShellMethod(value = "Edits an existing scope", key = "edit-scope")
     public String edit(@Min(2) int id,  @ShellOption(defaultValue = "") String name, @ShellOption(defaultValue = "") String description) {
         Scope scope = scopeService.edit(id, name, description);
         return render(Collections.singletonList(scope));

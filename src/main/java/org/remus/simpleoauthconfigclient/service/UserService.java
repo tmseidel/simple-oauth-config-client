@@ -68,4 +68,9 @@ public class UserService {
         String uriList = Arrays.stream(scopeId).map(e -> session.getEndpoint() + ScopeService.REST_URL + "/" + e).collect(Collectors.joining("\n"));
         restTemplate.exchange(REST_URL + "/" + userId + "/scopeList", String.class, HttpMethod.PUT, Optional.of(uriList));
     }
+
+    public void assignApplicationsToUser(Integer[] applicationId, int userId) {
+        String uriList = Arrays.stream(applicationId).map(e -> session.getEndpoint() + ApplicationService.REST_URL + "/" + e).collect(Collectors.joining("\n"));
+        restTemplate.exchange(REST_URL + "/" + userId + "/applications", String.class, HttpMethod.PUT, Optional.of(uriList));
+    }
 }
