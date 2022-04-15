@@ -19,8 +19,8 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: maven
-      - name Set Environment-Variables
-        run echo "github.shortended_ref=${{ github.ref }} | sed s/"refs\/tags\/"//" >> $GITHUB_ENV
+      - name: Set Environment-Variables
+        run: echo "github.shortended_ref=${{ github.ref }} | sed s/"refs\/tags\/"//" >> $GITHUB_ENV
       - name: Cache Maven packages
         uses: actions/cache@v1
         with:
