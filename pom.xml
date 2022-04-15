@@ -16,9 +16,9 @@
 	</properties>
 	<groupId>org.remus</groupId>
 	<artifactId>simple-oauth-config-client</artifactId>
-	<version>0.0.8-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>simple-oauth-config-client</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Simple-OAuht-Client-Configurator</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
